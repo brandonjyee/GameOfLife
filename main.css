@@ -1,16 +1,63 @@
+/* Reset default browser css */
+* {
+  padding: 0;
+  margin: 0;
+}
+
 body {
   font-family: Futura, Helvetica, Arial, sans-serif;
   color: #444;
 }
 
+.flex {
+  display: flex;
+
+}
+
+/* ============ Header START ============== */
+
 h1 {
   font-weight: normal;
 }
+
+h1.title {
+  justify-content: flex-start;
+  flex-grow: 1;
+  vertical-align: middle;
+}
+
+#header {
+  background-color: rgba(255,5,255,.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 3em;
+  z-index: 1;
+  padding: 0 1em;
+  flex-wrap: nowrap;
+}
+
+#boardDim {
+  margin: .5em .5em;
+}
+
+input.boardSize {
+  width: 10em;
+  height: 2em;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 10px;
+}
+
+
+/* =============== Header END ============= */
 
 #container {
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin-top: 50px;
 }
 
 #board {
@@ -41,13 +88,13 @@ td.alive {
 }
 
 #control_panel {
-  margin: 10px 0 50px 0;
+  margin: 2px 0;
 }
 
 .button {
   padding: 0.85em 1em;
   border: 1px solid transparent;
-  border-radius: 3px;
+  border-radius: 10px;
   font-size: 0.9em;
   text-align: center;
   background-color: #2ba6cb;
@@ -62,3 +109,12 @@ td.alive {
 .button:focus {
   outline: dashed 1px #2ba6cb;
 }
+
+
+
+
+
+
+/* #content {
+  top: 150px;
+} */

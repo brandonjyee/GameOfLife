@@ -1,11 +1,11 @@
-const width = 25;
-const height = 20; // width and height dimensions of the board
+let width = 25;
+let height = 20; // width and height dimensions of the board
 
 /**
  * Create a Game of Life instance
  */
 
-const gol = new GameOfLife(width, height);
+let gol = new GameOfLife(width, height);
 
 /**
  * create a table and append to the DOM
@@ -13,6 +13,11 @@ const gol = new GameOfLife(width, height);
 
 // Actual table cells
 const tds = [];
+
+
+function setUpBoard() {
+
+}
 
 // <table> element
 const table = document.createElement('tbody');
@@ -46,11 +51,7 @@ const paint = () => {
 	//
 	// To find all the <td>s in the table, might query the DOM for them, or
 	// could choose to collect them when create them in createTable.
-	//
-	//   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
-	//   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
-
-	tds.forEach(function(td) {
+	tds.forEach(function (td) {
 		let row = td.dataset.row;
 		let col = td.dataset.col;
 
@@ -62,7 +63,7 @@ const paint = () => {
 			td.className = '';
 		}
 	});
-	//[ {td dataset.row = 0; dataset.col = 0 }, {}]
+
 };
 
 /**
@@ -70,7 +71,7 @@ const paint = () => {
  */
 
 document.getElementById('board').addEventListener('mousedown', event => {
-	// TODO: Toggle clicked cell (event.target) and paint
+	// Toggle clicked cell (event.target) and paint
 	console.log('board clicked. tagName: ' + event.target.tagName);
 	if (event.target.tagName !== 'TD') {
 		return;
@@ -82,8 +83,23 @@ document.getElementById('board').addEventListener('mousedown', event => {
 	paint();
 });
 
+document.getElementById('boardDim').addEventListener('change', event => {
+	console.log('board dimensions changed');
+	try {
+		let inputWidth = parseInt(document.getElementById('boardWidth').value);
+		let inputHeight = parseInt(document.getElementById('boardHeight').value);
+		width = inputWidth;
+		height = inputHeight;
+		console.log('width: ' + width + ' height: ' + height);
+		gol = new GameOfLife(width, height);
+		paint();
+	} catch (error) {
+		console.log(error);
+	}
+});
+
 document.getElementById('step_btn').addEventListener('click', event => {
-	// TODO: Do one gol tick and paint
+	// Do one gol tick and paint
 	console.log('step btn clicked');
 	gol.tick();
 	paint();
@@ -92,10 +108,8 @@ document.getElementById('step_btn').addEventListener('click', event => {
 let interval;
 
 document.getElementById('play_btn').addEventListener('click', event => {
-	// TODO: Start playing by calling `tick` and paint
+	// Start playing by calling `tick` and paint
 	// repeatedly every fixed time interval.
-	// HINT:
-	// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
 	console.log('play button clicked');
 	// Toggle to be stop button
 	let playBtn = document.getElementById('play_btn');
@@ -111,7 +125,7 @@ document.getElementById('play_btn').addEventListener('click', event => {
 		interval = null;
 		return;
 	}
-	interval = setInterval(function() {
+	interval = setInterval(function () {
 		gol.tick();
 		paint();
 		console.log('setInterval running');
@@ -119,9 +133,9 @@ document.getElementById('play_btn').addEventListener('click', event => {
 });
 
 document.getElementById('random_btn').addEventListener('click', event => {
-	// TODO: Randomize the board and paint
-
-	tds.forEach(function(td) {
+	// Randomize the board and paint
+	console.log('random btn clicked');
+	tds.forEach(function (td) {
 		let randoNumber = Math.round(Math.random());
 		let row = td.dataset.row;
 		let col = td.dataset.col;
@@ -130,22 +144,17 @@ document.getElementById('random_btn').addEventListener('click', event => {
 		gol.setCell(randoNumber, row, col);
 	});
 	paint();
-	// if (randoNumber === 0) {
-	// 	gol.setCell(0, gol.row, gol.col);
-	// }
-
-	console.log('random btn clicked');
 });
 
 document.getElementById('clear_btn').addEventListener('click', event => {
-	tds.forEach(function(td) {
+	console.log('clear btn clicked');
+	tds.forEach(function (td) {
 		let row = td.dataset.row;
 		let col = td.dataset.col;
 		gol.setCell(0, row, col);
 	});
 	paint();
 	clearInterval(interval);
-	console.log('clear btn clicked');
 });
 
 document.getElementById('file_input').addEventListener('change', () => {
