@@ -1,4 +1,4 @@
 # Game of Life in JS
 
-Fullstack Academy workshop.
+Taking Conway's Game of Life and using it to generate music
 

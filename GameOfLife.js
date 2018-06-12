@@ -35,7 +35,7 @@ class GameOfLife {
 		return board;
 	}
 
-	checkInput(row, col) {
+	isWithinBounds(row, col) {
 		if (row < 0 || col < 0 || row >= this.height || col >= this.width) {
 			return false;
 		}
@@ -46,7 +46,7 @@ class GameOfLife {
 	// Affected by wrap config var
 	getCell(row, col) {
 		// Error checking
-		if (!this.checkInput(row, col)) {
+		if (!this.isWithinBounds(row, col)) {
 			return -1;
 		}
 
@@ -54,7 +54,7 @@ class GameOfLife {
 	}
 
 	setCell(value, row, col) {
-		if (!this.checkInput(row, col)) {
+		if (!this.isWithinBounds(row, col)) {
 			throw Error;
 		}
 
@@ -62,7 +62,7 @@ class GameOfLife {
 	}
 
 	toggleCell(row, col) {
-		if (!this.checkInput(row, col)) {
+		if (!this.isWithinBounds(row, col)) {
 			throw Error;
 		}
 

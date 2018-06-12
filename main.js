@@ -39,16 +39,14 @@ document.getElementById('board').append(table);
  */
 
 const paint = () => {
-	// TODO:
 	//   1. For each <td> in the table:
 	//     a. If its corresponding cell in gol instance is alive,
 	//        give the <td> the `alive` CSS class.
 	//     b. Otherwise, remove the `alive` class.
 	//
-	// To find all the <td>s in the table, you might query the DOM for them, or you
-	// could choose to collect them when we create them in createTable.
+	// To find all the <td>s in the table, might query the DOM for them, or
+	// could choose to collect them when create them in createTable.
 	//
-	// HINT:
 	//   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
 	//   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
 
