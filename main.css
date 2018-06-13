@@ -24,10 +24,11 @@ h1.title {
   justify-content: flex-start;
   flex-grow: 1;
   vertical-align: middle;
+  font-family: 'Orbitron', sans-serif;
 }
 
 #header {
-  background-color: rgba(255,5,255,.5);
+  background-color: rgba(209,226,255,.5);
   position: fixed;
   top: 0;
   left: 0;
