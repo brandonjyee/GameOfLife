@@ -52,33 +52,41 @@ class GameOfLife {
 			if (col < 0) col = this.width + col;
 		}
 		// console.log('In convertToValidCoords. Returning: ', row, col);
-		return [ row, col ];
+		return [row, col];
 	}
 
 	// row, col are zero-based
 	// Affected by wrap config var
 	getCell(row, col) {
+		if (this.config.wrap) {
+			[row, col] = this.convertToValidCoords(row, col);
+		}
 		// Error checking
 		if (!this.isWithinBounds(row, col)) {
-			if (this.config.wrap) {
-				let {row, col} = this.convertToValidCoords(row, col);
-				return this.board[row][col];
-			}
-			return -1;
+				return -1;
 		}
 
 		return this.board[row][col];
 	}
 
+	// Affected by wrap configuration
 	setCell(value, row, col) {
+		if (this.config.wrap) {
+			[row, col] = this.convertToValidCoords(row, col);
+		}
+
 		if (!this.isWithinBounds(row, col)) {
-			throw Error;
+				throw Error;
 		}
 
 		this.board[row][col] = value;
 	}
 
 	toggleCell(row, col) {
+		if (this.config.wrap) {
+			[row, col] = this.convertToValidCoords(row, col);
+		}
+
 		if (!this.isWithinBounds(row, col)) {
 			throw Error;
 		}
@@ -90,9 +98,10 @@ class GameOfLife {
 	/**
 	 * Return the amount of living neighbors around a given coordinate.
 	 */
-
+	// Affected by wrap.
 	livingNeighbors(row, col) {
 		let living = 0;
+
 		for (let i = row - 1; i <= row + 1; i++) {
 			for (let j = col - 1; j <= col + 1; j++) {
 				if (i === row && j === col) {
@@ -137,88 +146,88 @@ class GameOfLife {
 			}
 		}
 		this.board = newBoard;
-  }
+	}
 
-  loadCellFormat(inputStr) {
-    // dots are empty; O's are alive (that's a letter 'O', not zero)
-    // Load at the top left of the board
-    let row = 0;
-    let col = 0;
-    // Process each letter of the inputStr
-    for (let ch of inputStr) {
-      // If the character is a newline, increment row and reset col
-      if (ch === '\n') {
-        row++;
-        col = 0;
-      }
-      // Else, process and load the character into the board
-      else {
-        let val = (ch === '.')? 0 : 1;
-        this.setCell(val, row, col);
-        col++;
-      }
-    }
-  }
+	loadCellFormat(inputStr) {
+		// dots are empty; O's are alive (that's a letter 'O', not zero)
+		// Load at the top left of the board
+		let row = 0;
+		let col = 0;
+		// Process each letter of the inputStr
+		for (let ch of inputStr) {
+			// If the character is a newline, increment row and reset col
+			if (ch === '\n') {
+				row++;
+				col = 0;
+			}
+			// Else, process and load the character into the board
+			else {
+				let val = (ch === '.') ? 0 : 1;
+				this.setCell(val, row, col);
+				col++;
+			}
+		}
+	}
 
-  loadRLEFormat(rleStr) {
-    let rle = new RLE(rleStr);
-    console.log(`x: ${rle.x} y: ${rle.y}`);
-    // Process the body
-  }
+	loadRLEFormat(rleStr) {
+		let rle = new RLE(rleStr);
+		console.log(`x: ${rle.x} y: ${rle.y}`);
+		// Process the body
+	}
 }
 
 class RLE {
-  // this: x, y, rule, body
+	// this: x, y, rule, body
 
-  constructor(rleStr) {
+	constructor(rleStr) {
     /*
     RLE format: <number times to repeat pattern>
       b  => dead
       o  => alive
       $  => end of line
     */
-   let lines = asLinesArr(rle);
-   this.x = this.y = null;
-   this.body = '';
-   for (let line of lines) {
-     // Ignore comments
-     if (line && line[0] === '#') {
-       continue;
-     }
+		let lines = asLinesArr(rle);
+		this.x = this.y = null;
+		this.body = '';
+		for (let line of lines) {
+			// Ignore comments
+			if (line && line[0] === '#') {
+				continue;
+			}
 
-     // Parse the width and height
-     if (line && line[0] === 'x') {
-       // Format: x = m, y = n, rule = something
-       let commaSeparatedArr = line.split(',');
-       this.x = commaSeparatedArr[0].trim.split(' ')[2];
-       this.y = commaSeparatedArr[1].trim.split(' ')[2];
-     }
-     // Else it's part of the body
-     else {
-       this.body += line;
-     }
-   }
-  }
+			// Parse the width and height
+			if (line && line[0] === 'x') {
+				// Format: x = m, y = n, rule = something
+				let commaSeparatedArr = line.split(',');
+				this.x = commaSeparatedArr[0].trim.split(' ')[2];
+				this.y = commaSeparatedArr[1].trim.split(' ')[2];
+			}
+			// Else it's part of the body
+			else {
+				this.body += line;
+			}
+		}
+	}
 }
 
 function asLinesArr(str) {
-  let lines = [];
-  let line = '';
+	let lines = [];
+	let line = '';
 
-  // For each character in the str
-  for (let ch of str) {
-    // If there's a newline, reset the line var
-    if (ch === '\n') {
-      if (line) {
-        lines.push(line);
-      }
-      line = '';
-    }
-    // It's not a newline char, add the char to the line var
-    else {
-      line += ch;
-    }
-  }
-  lines.push(line);
-  return lines;
+	// For each character in the str
+	for (let ch of str) {
+		// If there's a newline, reset the line var
+		if (ch === '\n') {
+			if (line) {
+				lines.push(line);
+			}
+			line = '';
+		}
+		// It's not a newline char, add the char to the line var
+		else {
+			line += ch;
+		}
+	}
+	lines.push(line);
+	return lines;
 }

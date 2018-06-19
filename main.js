@@ -5,7 +5,7 @@ const DEFAULT_HEIGHT = 30; // width and height dimensions of the board
  * Global state
  */
 const state = {
-	gol: new GameOfLife(DEFAULT_WIDTH, DEFAULT_HEIGHT),		// The game engine instance
+	gol: new GameOfLife(DEFAULT_WIDTH, DEFAULT_HEIGHT, true),		// The game engine instance
 	tds: [],				// Contains the td elements that make up the board squares
 	processId: null,	// Id of the running simulation process
 	rate: 100,				// Rate (ms) at which to run the simulation
