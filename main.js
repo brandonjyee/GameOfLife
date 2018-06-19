@@ -1,20 +1,30 @@
-const DEFAULT_WIDTH = 25;
-const DEFAULT_HEIGHT = 20; // width and height dimensions of the board
+const DEFAULT_WIDTH = 60;
+const DEFAULT_HEIGHT = 30; // width and height dimensions of the board
 
 /**
  * Global state
  */
 const state = {
-	gol: new GameOfLife(DEFAULT_WIDTH, DEFAULT_HEIGHT),
-	tds: [],
+	gol: new GameOfLife(DEFAULT_WIDTH, DEFAULT_HEIGHT),		// The game engine instance
+	tds: [],				// Contains the td elements that make up the board squares
+	processId: null,	// Id of the running simulation process
+	rate: 100,				// Rate (ms) at which to run the simulation
 };
-// let gol = new GameOfLife(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+// Initial setups
+setInitialInputs();
 setUpBoardUI(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+
+function setInitialInputs() {
+	document.getElementById('boardWidth').value = DEFAULT_WIDTH;
+	document.getElementById('boardHeight').value = DEFAULT_HEIGHT;
+}
 
 /**
  * create a table and append to the DOM
  */
-function setUpBoardUI(height, width) {
+function setUpBoardUI(width, height) {
 	// Actual table cells
 	let tds = [];
 	// <table> element
@@ -99,7 +109,7 @@ document.getElementById('boardDim').addEventListener('change', event => {
 		// Initialize a new game engine instance
 		state.gol = new GameOfLife(width, height);
 		// Redraw the board UI
-		setUpBoardUI(height, width);
+		setUpBoardUI(width, height);
 		paint();
 	} catch (error) {
 		console.log(error);
@@ -112,8 +122,6 @@ document.getElementById('step_btn').addEventListener('click', event => {
 	state.gol.tick();
 	paint();
 });
-
-let interval;
 
 document.getElementById('play_btn').addEventListener('click', event => {
 	// Start playing by calling `tick` and paint
@@ -128,16 +136,16 @@ document.getElementById('play_btn').addEventListener('click', event => {
 	}
 
 	paint();
-	if (interval) {
-		clearInterval(interval);
-		interval = null;
+	if (state.processId) {
+		clearInterval(state.processId);
+		state.processId = null;
 		return;
 	}
-	interval = setInterval(function () {
+	state.processId = setInterval(function () {
 		state.gol.tick();
 		paint();
 		console.log('setInterval running');
-	}, 100);
+	}, state.rate);
 });
 
 document.getElementById('random_btn').addEventListener('click', event => {
@@ -162,7 +170,7 @@ document.getElementById('clear_btn').addEventListener('click', event => {
 		state.gol.setCell(0, row, col);
 	});
 	paint();
-	clearInterval(interval);
+	clearInterval(state.processId);
 });
 
 document.getElementById('file_input').addEventListener('change', () => {

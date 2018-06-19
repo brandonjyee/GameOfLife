@@ -1,0 +1,12 @@
+{
+  "name": "gameoflife",
+  "version": "1.0.0",
+  "description": "Conway's Game of Life",
+  "scripts": {
+    "test": "mocha --watch test/**.js"
+  },
+  "dependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  }
+}

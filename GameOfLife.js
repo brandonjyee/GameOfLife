@@ -42,11 +42,28 @@ class GameOfLife {
 		return true;
 	}
 
+	// Wrapping
+	convertToValidCoords(row, col) {
+		if (!this.isWithinBounds(row, col)) {
+			row = row % this.height;
+			col = col % this.width;
+
+			if (row < 0) row = this.height + row;
+			if (col < 0) col = this.width + col;
+		}
+		// console.log('In convertToValidCoords. Returning: ', row, col);
+		return [ row, col ];
+	}
+
 	// row, col are zero-based
 	// Affected by wrap config var
 	getCell(row, col) {
 		// Error checking
 		if (!this.isWithinBounds(row, col)) {
+			if (this.config.wrap) {
+				let {row, col} = this.convertToValidCoords(row, col);
+				return this.board[row][col];
+			}
 			return -1;
 		}
 
