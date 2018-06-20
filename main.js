@@ -1,4 +1,4 @@
-const DEFAULT_WIDTH = 60;
+const DEFAULT_WIDTH = 30;
 const DEFAULT_HEIGHT = 30; // width and height dimensions of the board
 
 /**
@@ -9,6 +9,7 @@ const state = {
 	tds: [],				// Contains the td elements that make up the board squares
 	processId: null,	// Id of the running simulation process
 	rate: 100,				// Rate (ms) at which to run the simulation
+	tonePlayer: new TonePlayer(),
 };
 
 // Initial setups
@@ -56,7 +57,6 @@ function setUpBoardUI(width, height) {
 /**
  * Draws every cell from the gol instance into an actual, visible DOM element
  */
-
 const paint = () => {
 	//   1. For each <td> in the table:
 	//     a. If its corresponding cell in gol instance is alive,
@@ -77,6 +77,7 @@ const paint = () => {
 			td.className = '';
 		}
 	});
+
 
 };
 
@@ -141,9 +142,40 @@ document.getElementById('play_btn').addEventListener('click', event => {
 		state.processId = null;
 		return;
 	}
+
+	// let colToPlay = 0;
 	state.processId = setInterval(function () {
 		state.gol.tick();
 		paint();
+
+		// Music stuff
+		// let gol = state.gol;
+		let polyArr = [];
+		for (let row = 0; row < state.gol.getHeight(); row++) {
+			for (let col = 0; col < state.gol.getWidth(); col++) {
+				let currentVal = state.gol.getCell(row, col);
+				// If cell at (row, col) is alive
+				if (currentVal) {
+					// Play sounds on each game tick
+					let note = state.tonePlayer.convertNumToNote(row);
+					console.log('note: ', note);//, 'colToPlay: ', colToPlay);
+					polyArr.push(note);
+					// let duration = state.tonePlayer.convertNumToDuration(col, state.gol.getWidth());
+					// console.log('note: ', note, ' duration: ', duration);
+					// state.tonePlayer.oscillatorTest(note);
+					// if (col === colToPlay) {
+						// state.tonePlayer.playNote(note);
+					// }
+				}
+			}
+		}
+		// Playing a polyNote (chord)
+		console.log('poly: ', polyArr.join(','));
+		state.tonePlayer.playPoly(polyArr);
+
+		// colToPlay = (colToPlay + 1) % state.gol.getWidth();
+
+
 		console.log('setInterval running');
 	}, state.rate);
 });

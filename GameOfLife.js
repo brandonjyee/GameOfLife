@@ -8,6 +8,14 @@ class GameOfLife {
 		}
 	}
 
+	getHeight() {
+		return this.height;
+	}
+
+	getWidth() {
+		return this.width;
+	}
+
 	/**
 	 * Returns a 2D Array
 	 */
