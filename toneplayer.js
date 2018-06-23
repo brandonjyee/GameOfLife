@@ -1,10 +1,12 @@
 class TonePlayer {
-  constructor() {
+  constructor(numRows, numCols) {
+    this.numRows = numRows;
+    this.numCols = numCols;
     const bpm = 220;
     Tone.Transport.bpm.value = bpm;
     // this.synth = new Tone.PluckSynth().toMaster();
     this.synth = new Tone.Synth().toMaster();
-    this.polySynth = new Tone.PolySynth(60, Tone.Synth).toMaster();
+    this.polySynth = new Tone.PolySynth(numRows, Tone.Synth).toMaster();
 
     //set the transport to repeat
     // Tone.Transport.loopEnd = '1m'
@@ -29,28 +31,25 @@ class TonePlayer {
     }
   }
 
-  convertNumToDuration(num, maxNum) {
+  convertNumToDuration(num, maxNum = this.numRows) {
     const maxDuration = 2;  // max time to hold a note
     const durationPerNum = maxDuration / maxNum;
     return Math.round(durationPerNum * num * 100) / 100;
   }
 
-  convertNumToNote(num) {
+  convertNumToNote(num, notesArr = ['A', 'B', 'C']) {
     let numNotes = 3;
     let dividend = num / 3; // This is the octave?
     dividend = Math.round(dividend);
     dividend += 2;  // Start at the second octave
     let mod = num % 3;  // This is the note
 
-    let note;
-    if (mod === 0) {
-      note = 'A' + dividend;
-    } else if (mod === 1) {
-      note = 'B' + dividend;
-    } else if (mod === 2) {
-      note = 'C' + dividend;
-    }
+    let note = notesArr[mod] + '' + dividend;  // string
     return note;
+  }
+
+  clearPoly() {
+    this.polySynth.releaseAll();
   }
 
   oscillatorTest(freqVal = "C4", duration = "+8n") {

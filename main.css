@@ -40,6 +40,11 @@ h1.title {
   /* TODO: add bottom drop shadow */
 }
 
+/* .fa-play-circle {
+  width: 2em;
+  height: 2em;
+} */
+
 #boardDim {
   margin: .5em .5em;
 }

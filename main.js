@@ -9,7 +9,7 @@ const state = {
 	tds: [],				// Contains the td elements that make up the board squares
 	processId: null,	// Id of the running simulation process
 	rate: 100,				// Rate (ms) at which to run the simulation
-	tonePlayer: new TonePlayer(),
+	tonePlayer: new TonePlayer(DEFAULT_WIDTH, DEFAULT_HEIGHT),
 };
 
 // Initial setups
@@ -124,20 +124,29 @@ document.getElementById('step_btn').addEventListener('click', event => {
 	paint();
 });
 
+let isPlaying = false;
 document.getElementById('play_btn').addEventListener('click', event => {
 	// Start playing by calling `tick` and paint
 	// repeatedly every fixed time interval.
 	console.log('play button clicked');
 	// Toggle to be stop button
-	let playBtn = document.getElementById('play_btn');
-	if (playBtn.innerText === 'Play') {
-		playBtn.innerText = 'Stop';
+	let playBtn = document.getElementById('play_btn_icon');
+	if (isPlaying) {
+		isPlaying = false;
+		playBtn.className = "fas fa-play fa-2x";
 	} else {
-		playBtn.innerText = 'Play';
+		playBtn.className = "fas fa-pause fa-2x";
+		isPlaying = true;
 	}
+	// if (playBtn.innerText === 'Play') {
+	// 	playBtn.innerText = 'Stop';
+	// } else {
+	// 	playBtn.innerText = 'Play';
+	// }
 
 	paint();
 	if (state.processId) {
+		state.tonePlayer.clearPoly();	// Turn off polysynth before stopping the interval
 		clearInterval(state.processId);
 		state.processId = null;
 		return;
@@ -157,7 +166,7 @@ document.getElementById('play_btn').addEventListener('click', event => {
 				// If cell at (row, col) is alive
 				if (currentVal) {
 					// Play sounds on each game tick
-					let note = state.tonePlayer.convertNumToNote(row);
+					let note = state.tonePlayer.convertNumToNote(row, ['C', 'D', 'E', 'G', 'A', 'C', 'D']);
 					console.log('note: ', note);//, 'colToPlay: ', colToPlay);
 					polyArr.push(note);
 					// let duration = state.tonePlayer.convertNumToDuration(col, state.gol.getWidth());
@@ -179,6 +188,21 @@ document.getElementById('play_btn').addEventListener('click', event => {
 		console.log('setInterval running');
 	}, state.rate);
 });
+
+// Will need this for dynamically changing the bpm
+// function runWithSetTimeout() {
+// 	// TODO
+
+// 	setTimeout(function FN() {
+
+// 		// Schedule the next tick
+// 		setTimeout(FN, getRate())
+// 	}, state.rate);
+// }
+
+// function getRate() {
+// 	return state.rate;
+// }
 
 document.getElementById('random_btn').addEventListener('click', event => {
 	// Randomize the board and paint
@@ -202,6 +226,7 @@ document.getElementById('clear_btn').addEventListener('click', event => {
 		state.gol.setCell(0, row, col);
 	});
 	paint();
+
 	clearInterval(state.processId);
 });
 

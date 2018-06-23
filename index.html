@@ -13,24 +13,27 @@
   <script src="GameOfLife.js" defer></script>
   <script src="toneplayer.js" defer></script>
   <script src="main.js" defer></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 
   <div id='header' class='flex'>
-    <h1 class='title'>Game of Life</h1>
+    <h1 class='title'>Game of Life <i class="fas fa-info-circle fa-xs"></i></h1>
+
     <div id='boardDim'>
       <input type='text' id='boardWidth' class='boardSize' value=''></input>
       <input type='text' id='boardHeight' class='boardSize' value=''></input>
     </div>
     <div id='control_panel'>
-      <button id='step_btn' class='button'>Step</button>
-      <button id='play_btn' class='button'>Play</button>
-      <button id='random_btn' class='button'>Randomize Board</button>
-      <button id='clear_btn' class='button'>Clear</button>
+      <button id='step_btn' class='button'><i class="fas fa-step-forward fa-2x"></i></button>
+      <button id='play_btn' class='button'><i id="play_btn_icon" class="fas fa-play fa-2x"></i></button>
+      <button id='random_btn' class='button'><i class="fas fa-dice fa-2x"></i></button>
+      <button id='clear_btn' class='button'><i class="fas fa-trash-alt fa-2x"></i></button>
       <input id='wrap_input' type='checkbox' name='board wraps' value=''></input>
       <label for="wrap_input">Board Wraps?</label>
     </div>
     <div id='options'>
-      <label for="file" id='input'>Choose custom cell to upload</label>
-      <input type='file' id='file_input' class='center-block'>
+      <i class="fas fa-file-upload fa-2x"></i>
+      <label for="file" id='label_file_input'></label>
+      <input type='file' id='file_input' accept=".acorn, .rhel, .txt" class='center-block'>
     </div>
   </div>
 </head>
